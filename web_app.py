@@ -193,17 +193,7 @@ if "work_data" in st.session_state and st.session_state.work_data:
 
                         if output_files:
                             st.success("✅ Export erfolgreich abgeschlossen!")
-                            st.subheader("📁 Generierte Excel-Dateien:")
-                            for file_path in output_files:
-                                with open(file_path, "rb") as f:
-                                    file_data = f.read()
-                                file_name = Path(file_path).name
-                                st.download_button(
-                                    label=f"⬇️ {file_name} herunterladen",
-                                    data=file_data,
-                                    file_name=file_name,
-                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                                )
+                            st.session_state['output_files'] = output_files
                         else:
                             st.error("❌ Export fehlgeschlagen!")
 
@@ -223,17 +213,7 @@ if "work_data" in st.session_state and st.session_state.work_data:
 
                         if output_files:
                             st.success("✅ Export erfolgreich abgeschlossen!")
-                            st.subheader("📁 Generierte Excel-Dateien:")
-                            for file_path in output_files:
-                                with open(file_path, "rb") as f:
-                                    file_data = f.read()
-                                file_name = Path(file_path).name
-                                st.download_button(
-                                    label=f"⬇️ {file_name} herunterladen",
-                                    data=file_data,
-                                    file_name=file_name,
-                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                                )
+                            st.session_state['output_files'] = output_files
                         else:
                             st.error("❌ Export fehlgeschlagen!")
 
@@ -244,6 +224,21 @@ if "work_data" in st.session_state and st.session_state.work_data:
                 import traceback
 
                 st.error(f"❌ Vollständiger Traceback: {traceback.format_exc()}")
+
+    # Display download buttons if output_files exist in session_state
+    if 'output_files' in st.session_state and st.session_state['output_files']:
+        st.subheader("📁 Generierte Excel-Dateien:")
+        for file_path in st.session_state['output_files']:
+            with open(file_path, "rb") as f:
+                file_data = f.read()
+            file_name = Path(file_path).name
+            st.download_button(
+                label=f"⬇️ {file_name} herunterladen",
+                data=file_data,
+                file_name=file_name,
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                key=f"download_{file_name}"
+            )
 
     with st.expander(
         "Klicken Sie hier, um die Datenübersicht anzuzeigen", expanded=True
