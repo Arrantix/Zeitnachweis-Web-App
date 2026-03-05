@@ -28,16 +28,17 @@ def export_with_holidays(
     name: str = "",
     sponsor: str = "",
     business: str = "",
-) -> bool:
+) -> List[str]:
     try:
         if not os.path.exists(template_path):
             print(f"❌ Error: Template file {template_path} not found")
-            return False
+            return []
 
         validate_paths(template_path, output_dir)
 
         parsed_dates = {}
         months_data = {}
+        output_files = []
 
         for day in work_data:
             if day.date not in parsed_dates:
@@ -84,9 +85,10 @@ def export_with_holidays(
             print(
                 f"✅ Exported {output_filename} with {len(month_work_days)} work days"
             )
+            output_files.append(str(output_path))
 
         print(f"📁 Created {len(months_data)} separate files in output folder")
-        return True
+        return output_files
 
     except (
         openpyxl.utils.exceptions.InvalidFileException,

@@ -181,7 +181,7 @@ if "work_data" in st.session_state and st.session_state.work_data:
                             f"✅ {len(processed_work_days)} Arbeitstage verarbeitet"
                         )
 
-                        success = export_with_holidays(
+                        output_files = export_with_holidays(
                             processed_work_days,
                             state_code,
                             template_path=str(script_dir / TEMPLATE_PATH),
@@ -191,11 +191,51 @@ if "work_data" in st.session_state and st.session_state.work_data:
                             business=business,
                         )
 
-                if success:
-                    st.success("✅ Export erfolgreich abgeschlossen!")
-                    st.info(f"📁 Excel-Datei gespeichert in: {script_dir / 'output'}")
-                else:
-                    st.error("❌ Export fehlgeschlagen!")
+                        if output_files:
+                            st.success("✅ Export erfolgreich abgeschlossen!")
+                            st.subheader("📁 Generierte Excel-Dateien:")
+                            for file_path in output_files:
+                                with open(file_path, "rb") as f:
+                                    file_data = f.read()
+                                file_name = Path(file_path).name
+                                st.download_button(
+                                    label=f"⬇️ {file_name} herunterladen",
+                                    data=file_data,
+                                    file_name=file_name,
+                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                )
+                        else:
+                            st.error("❌ Export fehlgeschlagen!")
+
+                    else:
+                        # For WorkDay objects from pasted JSON
+                        st.write("🔍 Eingefügte Daten verarbeiten...")
+                        # WorkDay objects are already processed
+                        output_files = export_with_holidays(
+                            st.session_state.work_data,
+                            state_code,
+                            template_path=str(script_dir / TEMPLATE_PATH),
+                            output_dir=str(script_dir / "output"),
+                            name=name,
+                            sponsor=sponsor,
+                            business=business,
+                        )
+
+                        if output_files:
+                            st.success("✅ Export erfolgreich abgeschlossen!")
+                            st.subheader("📁 Generierte Excel-Dateien:")
+                            for file_path in output_files:
+                                with open(file_path, "rb") as f:
+                                    file_data = f.read()
+                                file_name = Path(file_path).name
+                                st.download_button(
+                                    label=f"⬇️ {file_name} herunterladen",
+                                    data=file_data,
+                                    file_name=file_name,
+                                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                )
+                        else:
+                            st.error("❌ Export fehlgeschlagen!")
 
             except Exception as e:
                 st.error(f"❌ Exportfehler: {e}")
@@ -325,7 +365,7 @@ with st.expander("Verwendung"):
     1. **Einstellungen konfigurieren**: Deutsches Bundesland in der Seitenleiste auswählen
     2. **Daten bereitstellen**: JSON-Datei hochladen oder JSON einfügen
     3. **Exportieren**: Export-Schaltfläche klicken, um Excel-Dateien zu erstellen
-    4. **Ergebnisse**: Ausgabeverzeichnis auf generierte Excel-Dateien überprüfen
+    4. **Ergebnisse**: Generierte Excel-Dateien direkt herunterladen
     
     **JSON-Dateiformat:**
     JSON-Datei sollte Arbeitsdaten mit Feldern wie Datum, Wochentag, Status, Startzeit, Endzeit usw. enthalten.
