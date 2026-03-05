@@ -7,9 +7,7 @@ from load_work_data import load_work_data
 from export_with_holidays import export_with_holidays
 from process_work_day_data import process_work_day_data
 
-DEFAULT_STATE_CODE = "NI"
 DEFAULT_OUTPUT_DIR = "../output"
-STATE_CODE_LENGTH = 2
 EXIT_CODE_ERROR = 1
 
 
@@ -18,16 +16,10 @@ def start_time_export():
         description="Export work data to Excel files with holiday integration",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""Usage examples:
-  python start_time_export.py BY
-  python start_time_export.py NI /path/to/data.json""",
+  python start_time_export.py
+  python start_time_export.py /path/to/data.json""",
     )
 
-    parser.add_argument(
-        "state_code",
-        nargs="?",
-        default=DEFAULT_STATE_CODE,
-        help="German state code (default: NI)",
-    )
     parser.add_argument("data_file", nargs="?", help="Path to data file (JSON)")
     parser.add_argument(
         "--output-dir",
@@ -37,9 +29,8 @@ def start_time_export():
 
     args = parser.parse_args()
 
-    if len(args.state_code) != STATE_CODE_LENGTH:
-        print("❌ Error: State code must be 2 characters (e.g., NI, BY, BW)")
-        sys.exit(EXIT_CODE_ERROR)
+    # State code hardcoded to DE since API now only accepts DE
+    state_code = "DE"
 
     data_file = args.data_file
     if data_file is None:
@@ -70,7 +61,7 @@ def start_time_export():
         sys.exit(EXIT_CODE_ERROR)
 
     print("=== Excel Export ===")
-    print(f"State: {args.state_code}")
+    print("State: DE")
     print(f"Output: {args.output_dir}/ZEITNACHWEIS_[year]_[month].xlsx")
     if data_file is None:
         print("Data: Pasted JSON")
@@ -79,7 +70,7 @@ def start_time_export():
 
     try:
         output_files = export_with_holidays(
-            work_days, args.state_code, output_dir=args.output_dir
+            work_days, state_code, output_dir=args.output_dir
         )
 
         if output_files:

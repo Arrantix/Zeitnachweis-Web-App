@@ -51,31 +51,8 @@ with st.sidebar:
         placeholder="Firmenname",
     )
 
-    # State code selection
-    state_options = [
-        "NI",
-        "BY",
-        "BW",
-        "BE",
-        "BB",
-        "HB",
-        "HH",
-        "MV",
-        "NW",
-        "RP",
-        "SH",
-        "SL",
-        "SN",
-        "ST",
-        "TH",
-        "DE",
-    ]
-    state_code = st.selectbox(
-        "Bundesland-Code",
-        options=state_options,
-        index=0,
-        help="Deutsches Bundesland für Feiertagsberechnung auswählen",
-    )
+    # State code hardcoded to DE since API now only accepts DE
+    state_code = "DE"
 
 # Main content area
 st.header("📁 Dateneingabe")
@@ -357,7 +334,7 @@ if "work_data" in st.session_state and st.session_state.work_data:
 st.header("📖 Anleitung")
 with st.expander("Verwendung"):
     st.markdown("""
-    1. **Einstellungen konfigurieren**: Deutsches Bundesland in der Seitenleiste auswählen
+    1. **Einstellungen konfigurieren**: Name, Sponsor und Business in der Seitenleiste eingeben
     2. **Daten bereitstellen**: JSON-Datei hochladen oder JSON einfügen
     3. **Exportieren**: Export-Schaltfläche klicken, um Excel-Dateien zu erstellen
     4. **Ergebnisse**: Generierte Excel-Dateien direkt herunterladen

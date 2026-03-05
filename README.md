@@ -108,27 +108,6 @@ Zeitnachweis/
 | UNBEKANNT | 
 | KEIN_EINTRAG | 
 
-## 🇩🇪 Bundeslandcodes
-
-| Code | Bundesland |
-|------|------------|
-| BY | Bayern |
-| BW | Baden-Württemberg |
-| BE | Berlin |
-| BB | Brandenburg |
-| HB | Bremen |
-| HH | Hamburg |
-| HE | Hessen |
-| MV | Mecklenburg-Vorpommern |
-| NI | Niedersachsen |
-| NW | Nordrhein-Westfalen |
-| RP | Rheinland-Pfalz |
-| SL | Saarland |
-| SN | Sachsen |
-| ST | Sachsen-Anhalt |
-| SH | Schleswig-Holstein |
-| TH | Thüringen |
-
 ## 📁 Ausgabe
 
 Erstellt separate Excel-Dateien für jeden Monat:
@@ -142,14 +121,11 @@ ZEITNACHWEIS_2026_2.xlsx  (Februar 2026)
 
 ### Nach Excel exportieren
 ```bash
-# Standard (Niedersachsen), prompts for pasted JSON
+# Standard, prompts for pasted JSON
 python start_time_export.py
 
-# Bestimmtes Bundesland, prompts for pasted JSON
-python start_time_export.py BY
-
 # Mit benutzerdefinierter Datei (optional)
-python start_time_export.py NI /path/to/my_data.json
+python start_time_export.py /path/to/my_data.json
 ```
 
 1. **Zum Ordner navigieren:**
@@ -159,11 +135,10 @@ cd ./Zeitnachweis/scripts
 
 2. **Skript ausführen:**
 ```bash
-python start_time_export.py [state_code] [data_file] [--output-dir DIR]
+python start_time_export.py [data_file] [--output-dir DIR]
 ```
 
 Wenn keine Datendatei angegeben wird, fordert das Skript zur Eingabe der JSON-Daten auf.
 
-- `state_code`: Bundesland für Feiertage (optional, Standard: NI)
 - `data_file`: Pfad zur JSON-Datendatei (optional, wenn nicht angegeben, Eingabeaufforderung)
 - `--output-dir`: Output-Verzeichnis (optional, Standard: ../output)

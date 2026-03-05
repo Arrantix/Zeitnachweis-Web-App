@@ -22,7 +22,7 @@ DATE_FORMAT = "%Y-%m-%d"
 
 def export_with_holidays(
     work_data: List,
-    state_code: str = DEFAULT_STATE_CODE,
+    state_code: str = "DE",
     template_path: str = DEFAULT_TEMPLATE_PATH,
     output_dir: str = DEFAULT_OUTPUT_DIR,
     name: str = "",
